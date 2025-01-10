@@ -43,59 +43,44 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen]);
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <header className={`fixed w-full z-50 transition-all duration-300 ${
       isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-lg' : 'bg-transparent'
     }`}>
-      <div className="bg-gradient-to-r from-blue-900 to-blue-800 text-white">
-        <div className="container mx-auto">
-          <div className="flex justify-center items-center py-2 px-4 overflow-hidden">
-            <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-2 animate-fade-in">
-              <a
-                href="mailto:empresa-rentable@ceoconsultores.com"
-                className="group flex items-center hover:text-blue-200 transition-all duration-300 transform hover:-translate-y-0.5"
-              >
-                <Mail className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
-                <span className="relative overflow-hidden">
-                  <span className="inline-block transform transition-transform duration-300 group-hover:-translate-y-full">
-                    empresa-rentable@ceoconsultores.com
-                  </span>
-                  <span className="absolute top-0 left-0 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                    empresa-rentable@ceoconsultores.com
-                  </span>
-                </span>
-              </a>
-              <div className="flex items-center space-x-6">
-                <a
-                  href="tel:+525559111739"
-                  className="group flex items-center hover:text-blue-200 transition-all duration-300 transform hover:-translate-y-0.5"
-                >
-                  <Phone className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
-                  <span className="relative overflow-hidden">
-                    <span className="inline-block transform transition-transform duration-300 group-hover:-translate-y-full">
-                      (55) 5911 1739
-                    </span>
-                    <span className="absolute top-0 left-0 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                      ¡Llámanos!
-                    </span>
-                  </span>
-                </a>
-                <a
-                  href="tel:+525570288499"
-                  className="group flex items-center hover:text-blue-200 transition-all duration-300 transform hover:-translate-y-0.5"
-                >
-                  <Phone className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
-                  <span className="relative overflow-hidden">
-                    <span className="inline-block transform transition-transform duration-300 group-hover:-translate-y-full">
-                      (55) 7028 8499
-                    </span>
-                    <span className="absolute top-0 left-0 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                      ¡Contáctanos!
-                    </span>
-                  </span>
-                </a>
-              </div>
-            </div>
+      {/* Contact info bar - hidden on mobile */}
+      <div className="hidden sm:block bg-gradient-to-r from-blue-900 to-blue-800 text-white py-2">
+        <div className="container mx-auto px-4 flex justify-end space-x-6 text-sm">
+          <a href="mailto:empresa-rentable@ceoconsultores.com" 
+             className="flex items-center hover:text-blue-200 transition-colors">
+            <Mail className="h-4 w-4 mr-2" />
+            empresa-rentable@ceoconsultores.com
+          </a>
+          <div className="flex items-center space-x-4">
+            <a href="tel:+525559111739" 
+               className="flex items-center hover:text-blue-200 transition-colors">
+              <Phone className="h-4 w-4 mr-2" />
+              (55) 5911 1739
+            </a>
+            <a href="tel:+525570288499" 
+               className="flex items-center hover:text-blue-200 transition-colors">
+              <Phone className="h-4 w-4 mr-2" />
+              (55) 7028 8499
+            </a>
           </div>
         </div>
       </div>
@@ -103,13 +88,14 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center">
-            <span className={`text-3xl font-bold bg-gradient-to-r ${
+            <span className={`text-2xl sm:text-3xl font-bold bg-gradient-to-r ${
               isScrolled ? 'from-blue-900 to-blue-700' : 'from-white to-blue-200'
             } bg-clip-text text-transparent transition-colors duration-300`}>
               CEO Consultores
             </span>
           </div>
 
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
             {navigation.map((item) => (
               <div key={item.name} className="relative group">
@@ -154,7 +140,8 @@ const Header = () => {
             ))}
             <a
               href="#contact"
-              className={`ml-4 px-6 py-2 rounded-lg font-bold transition-all duration-300 ${
+              className={`ml-4 px-6 py-2 rounded-lg font-bold transition-all duration-300
+                        transform hover:-translate-y-0.5 active:translate-y-0 ${
                 isScrolled
                   ? 'bg-blue-900 text-white hover:bg-blue-800'
                   : 'bg-white text-blue-900 hover:bg-blue-50'
@@ -164,13 +151,15 @@ const Header = () => {
             </a>
           </nav>
 
+          {/* Mobile Menu Button */}
           <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
             className={`md:hidden p-2 rounded-lg transition-colors ${
               isScrolled
                 ? 'hover:bg-blue-50 text-gray-900'
                 : 'hover:bg-white/10 text-white'
             }`}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
           >
             {isMenuOpen ? (
               <X className="h-6 w-6" />
@@ -181,20 +170,71 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
-      {isMenuOpen && (
-        <div className="md:hidden absolute w-full bg-white shadow-lg">
-          <div className="px-2 pt-2 pb-3 space-y-1">
+      {/* Mobile Menu Overlay */}
+      <div
+        className={`fixed inset-0 bg-black/50 backdrop-blur-sm md:hidden transition-opacity duration-300 ${
+          isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+        }`}
+        onClick={closeMenu}
+      />
+
+      {/* Mobile Menu Panel */}
+      <div
+        className={`fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-lg transform 
+                   transition-transform duration-300 ease-in-out md:hidden ${
+                     isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+                   }`}
+      >
+        <div className="h-full overflow-y-auto">
+          {/* Mobile Menu Header */}
+          <div className="bg-blue-900 text-white p-6">
+            <div className="flex items-center justify-between mb-6">
+              <span className="text-2xl font-bold">CEO Consultores</span>
+              <button
+                onClick={closeMenu}
+                className="p-2 hover:bg-white/10 rounded-full transition-colors
+                         transform hover:rotate-90 duration-300"
+                aria-label="Close menu"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+            <div className="space-y-4">
+              <a href="mailto:empresa-rentable@ceoconsultores.com" 
+                 className="flex items-center space-x-3 hover:text-blue-200 transition-colors"
+                 onClick={closeMenu}>
+                <Mail className="h-5 w-5" />
+                <span>empresa-rentable@ceoconsultores.com</span>
+              </a>
+              <div className="space-y-2">
+                <a href="tel:+525559111739" 
+                   className="flex items-center space-x-3 hover:text-blue-200 transition-colors"
+                   onClick={closeMenu}>
+                  <Phone className="h-5 w-5" />
+                  <span>(55) 5911 1739</span>
+                </a>
+                <a href="tel:+525570288499" 
+                   className="flex items-center space-x-3 hover:text-blue-200 transition-colors"
+                   onClick={closeMenu}>
+                  <Phone className="h-5 w-5" />
+                  <span>(55) 7028 8499</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Navigation */}
+          <div className="p-6 space-y-2">
             {navigation.map((item) => (
               <div key={item.name}>
                 <a
                   href={item.href}
-                  className={`block px-4 py-2 text-base font-medium rounded-lg
+                  onClick={closeMenu}
+                  className={`block px-4 py-3 text-lg font-medium rounded-lg
                             transition-colors duration-300
                             ${activeSection === item.href.replace('#', '')
                               ? 'bg-blue-50 text-blue-900'
                               : 'text-gray-700 hover:bg-gray-50'}`}
-                  onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
                 </a>
@@ -204,9 +244,9 @@ const Header = () => {
                       <a
                         key={subitem.name}
                         href={subitem.href}
-                        className="block px-4 py-2 text-sm text-gray-600 rounded-lg
+                        onClick={closeMenu}
+                        className="block px-4 py-2 text-gray-600 rounded-lg
                                  hover:bg-gray-50 transition-colors"
-                        onClick={() => setIsMenuOpen(false)}
                       >
                         {subitem.name}
                       </a>
@@ -215,9 +255,18 @@ const Header = () => {
                 )}
               </div>
             ))}
+            <a
+              href="#contact"
+              onClick={closeMenu}
+              className="block px-4 py-3 mt-4 text-center text-white bg-blue-900
+                       rounded-lg font-bold hover:bg-blue-800 transition-colors
+                       active:scale-95"
+            >
+              Contáctenos
+            </a>
           </div>
         </div>
-      )}
+      </div>
     </header>
   );
 }

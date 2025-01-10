@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply text-gray-900;
+  }
+
+  /* Modern scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-blue-900/50 rounded-full hover:bg-blue-900/70 transition-colors;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Modern card hover effect */
+  .service-card {
+    @apply relative bg-white rounded-lg p-8 shadow-lg transition-all duration-300 hover:shadow-xl 
+           hover:-translate-y-1 hover:bg-gradient-to-br from-white to-blue-50;
+  }
+
+  /* Modern button styles */
+  .btn-primary {
+    @apply bg-blue-900 text-white px-8 py-4 rounded-lg font-bold
+           hover:bg-blue-800 transform hover:-translate-y-0.5
+           transition-all duration-300 focus:ring-4 focus:ring-blue-200
+           active:scale-95;
+  }
+
+  /* Floating navigation indicator */
+  .nav-indicator {
+    @apply absolute bottom-0 left-0 h-0.5 bg-blue-900 transition-all duration-300;
+  }
+
+  /* Modern section transitions */
+  .section-fade-in {
+    @apply opacity-0 translate-y-8 transition-all duration-700;
+  }
+
+  .section-visible {
+    @apply opacity-100 translate-y-0;
+  }
+
+  /* Background grid pattern */
+  .bg-grid-pattern {
+    background-image: radial-gradient(circle, #000 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+}
+
+/* Modern form inputs */
+input, textarea {
+  @apply border-gray-300 rounded-lg shadow-sm transition-all duration-300
+         focus:ring-2 focus:ring-blue-200 focus:border-blue-400
+         hover:border-blue-300;
+}
+
+/* Hero animations */
+@keyframes subtle-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-600 {
+  animation-delay: 600ms;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
